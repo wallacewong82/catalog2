@@ -1,0 +1,53 @@
+<!-- This is the page that displays the details of a selected Item. -->
+<!-- Users who have signed in will be able to also Edit and Delete  -->
+<!-- the specific items that they own. They will not be able to do so -->
+<!-- if they do not own the item. -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset = "utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="/static/css/main.css?q=1280549784"
+   type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+    <nav class="mynav">
+      <ul>
+        <li><a  href='{{url_for('MyCatalog')}}'> Home</a></li>
+        <li class="logoutbtn">
+          {% if login_button == 1 %}
+            <a class="active" href="{{url_for('showLogin')}}" style="float:right"> Login </a>
+          {% else %}
+            <a class="active" href="{{url_for('gdisconnect')}}" style="float:right"> Logout </a>
+          {% endif %}
+        </li>
+      </ul>
+    </nav>
+  </head>
+  <body>
+    <div class="container">
+      <table class="mytable">
+        <td>
+          <h1> {{item.name}} </h1>
+          <br>
+          <span> Description: </span>
+          <span>{{item.description}}</span>
+          <br>
+          <br>
+          <span> Date added: </span>
+          <span>{{item.datetime_added.strftime('%Y-%m-%d %H:%M')}}</span>
+          <br>
+          <br>
+          <span> Created by: </span>
+          <span>{{item.user_name}}</span>
+          <br>
+          <br>
+          {% if can_edit == 1 %}
+          <a href='{{url_for('EditItem',subcatalog_name = subcatalog_name, item_name=item.name) }}'>Edit</a>
+          <span> | </span>
+          <a href='{{url_for('DeleteItem',subcatalog_name = subcatalog_name, item_name=item.name) }}'>Delete</a>
+          {% endif %}
+        </td>
+      </table>
+    </div>
+  </body>
+</html>

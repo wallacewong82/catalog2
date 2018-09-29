@@ -1,0 +1,102 @@
+<!-- This is the main html file which houses the Main Catalog. -->
+<!-- This page displays all Categories and selected Items, and -->
+<!-- also contains the activated features upon Sign-in authentication. -->
+<!-- Users who do not sign-in will not have all the features activated. -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset = "utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="/static/css/main.css?q=1280549784"
+   type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+    <nav class="mynav">
+      <ul>
+        <li><a  href='{{url_for('MyCatalog')}}'> Home</a></li>
+        <li>
+          {% if login_button == 0 %}
+            <a href='{{url_for('AddSubCatalog') }}'>New Category</a>
+            {% endif %}
+        </li>
+        <li>
+          {% if login_button == 0 %}
+            <a href='{{url_for('AddItem') }}'>New Item</a>
+            {% endif %}
+        </li>
+        <li class="logoutbtn">
+          {% if login_button == 1 %}
+            <a class="active" href="{{url_for('showLogin')}}" style="float:right"> Login </a>
+          {% else %}
+            <a class="active" href="{{url_for('gdisconnect')}}" style="float:right"> Logout </a>
+          {% endif %}
+        </li>
+      </ul>
+
+
+    </nav>
+    <table class="lowerbar">
+      <br>
+      <br>
+      <br>
+      <br>
+          <!--MESSAGE FLASHING EXAMPLE -->
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+
+            <ul class="difful">
+              {% for message in messages %}
+              <li><strong>{{message}}</strong></li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+    </table>
+  </head>
+  <body>
+    <div class="container">
+      <table class="mytable">
+        <td>
+        <h1> {{catalog.name}} </h1>
+
+        {% for i in subcatalog %}
+        <a href='{{url_for('UpdateCatalog', subcatalog_name = i.name) }}'>{{i.name}}</a>
+        </br>
+        <span> Description: </span>
+        {{i.description}}
+        </br>
+        <span> Date added: </span>
+        {{i.datetime_added.strftime('%Y-%m-%d %H:%M')}}
+        </br>
+        <span> Created by: </span>
+        {{i.user_name}}
+        </br>
+          {% if useremail ==i.user_email %}
+            <a href='{{url_for('EditSubcatalog',subcatalog_name = i.name) }}'>Edit</a>
+            <span> | </span>
+            <a href='{{url_for('DeleteSubcatalog',subcatalog_name = i.name) }}'>Delete</a>
+            {% endif %}
+          </br>
+        </br>
+        {% endfor %}
+      </td>
+      <td>
+          <h1>{{title}}</h1>
+          <br>
+          {% for j in items %}
+          <a href='{{url_for('UpdateItems',subcatalog_name = j.parent_catalog, item_name = j.name) }}'>{{j.name}}</a>
+          <span><i>({{j.parent_catalog}})</i></span>
+        </br>
+        <span> Date added: </span>
+        {{j.datetime_added.strftime('%Y-%m-%d %H:%M')}}
+        </br>
+        <span> Created by: </span>
+        {{j.user_name}}
+        </br>
+        </br>
+        {% endfor %}
+        </br>
+      </td>
+      </table>
+    </div>
+  </body>
+</html>

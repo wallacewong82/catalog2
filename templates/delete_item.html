@@ -1,0 +1,42 @@
+<!-- This allows the signed-in user to delete the selected item that is -->
+<!-- owned by him/her. The signed-in user will not be able to delete an -->
+<!-- Item that does not belong to him/her; if he/she tries to type in the -->
+<!-- /delete URL directly, he/she will be taken back to the Login screen. -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset = "utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="/static/css/main.css?q=1280549784"
+   type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+    <nav class="mynav">
+      <ul>
+        <li><a  href='{{url_for('MyCatalog')}}'> Home</a></li>
+        <li class="logoutbtn">
+          {% if login_button == 1 %}
+            <a class="active" href="{{url_for('showLogin')}}" style="float:right"> Login </a>
+          {% else %}
+            <a class="active" href="{{url_for('gdisconnect')}}" style="float:right"> Logout </a>
+          {% endif %}
+        </li>
+      </ul>
+    </nav>
+  </head>
+  <body>
+    <div class="container">
+      <table class="mytable">
+        <td>
+          <h1> Delete item </h1>
+          <h3> Are you sure you want to delete {{item.name}}? </h3>
+
+          <form method = 'post' action='{{ url_for('DeleteItem',subcatalog_name = subcatalog_name, item_name=item.name)}}' onsubmit="return confirm('Are you sure?');">
+            <input type='submit' value = 'Submit' class="link-lookalike">
+            <span> | </span>
+            <a href= '{{url_for('UpdateCatalog',subcatalog_name=subcatalog_name)}}'>Cancel</a>
+          </form>
+
+        </td>
+      </table>
+    </div>
+</html>
